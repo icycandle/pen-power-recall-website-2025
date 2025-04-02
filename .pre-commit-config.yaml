@@ -44,3 +44,10 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+
+      - id: e2e-test
+        name: End-to-End Test (Dry Run)
+        entry: poetry run python src/main.py --dry-run --output-dir=test_dry_run
+        language: system
+        pass_filenames: false
+        always_run: true
