@@ -171,6 +171,9 @@ class HtmlGenerator:
         current_time = datetime.now()
         format_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
+        # 從環境變數中獲取網站 URL，如果沒有則使用默認值
+        site_url = os.getenv("SITE_URL", "https://pen-power-recall-website-2025.pages.dev")
+
         # 渲染模板
         html_content = template.render(
             title="「筆桿接力罷免到底」創作接力",
@@ -184,6 +187,7 @@ class HtmlGenerator:
             category_column_index=indices["category"],
             now=format_time,
             year=current_time.year,
+            site_url=site_url,
         )
 
         # 寫入檔案
