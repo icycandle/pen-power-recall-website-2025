@@ -173,8 +173,8 @@ class HtmlGenerator:
 
         # 渲染模板
         html_content = template.render(
-            title="作品集展示",
-            subtitle="精選創作分享平台",
+            title="「筆桿接力罷免到底」創作接力",
+            subtitle="作品連結目錄",
             headers=data.headers,
             rows=data.rows,
             items=data.to_dict_list(),
