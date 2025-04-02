@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
     - name: 檢出程式碼
