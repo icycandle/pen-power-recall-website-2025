@@ -4,6 +4,9 @@ on:
   push:
     branches: [ master, main ]
   workflow_dispatch:
+  schedule:
+    # 每天早上 8:00 (UTC+8) 執行，UTC 時間為 00:00
+    - cron: '0 0 * * *'
 
 jobs:
   build:
