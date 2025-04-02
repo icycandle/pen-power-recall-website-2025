@@ -8,7 +8,7 @@ import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from ..domain.models import SheetData
+from src.domain.models import SheetData
 
 
 class SheetService:

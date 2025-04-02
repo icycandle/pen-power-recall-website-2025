@@ -9,7 +9,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from ..domain.models import SheetData
+from src.domain.models import SheetData
 
 
 class HtmlGenerator:

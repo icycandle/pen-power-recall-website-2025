@@ -6,19 +6,16 @@ import argparse
 import os
 import sys
 
+# 確保項目根目錄在搜索路徑中
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
 from dotenv import load_dotenv
 
+# 使用絕對導入，與測試代碼保持一致
 from src.application.html_generator import HtmlGenerator
 from src.application.sheet_service import SheetService
 from src.domain.models import SheetData
-
-
-def ensure_import_paths() -> None:
-    """確保可以正確導入其他模組"""
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(current_dir)
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
 
 
 def create_mock_data() -> SheetData:
@@ -80,9 +77,6 @@ def dry_run(output_dir: str) -> None:
 
 def main() -> None:
     """主函數：讀取資料並產生靜態網站"""
-    # 確保導入路徑正確
-    ensure_import_paths()
-
     parser = argparse.ArgumentParser(
         description="從 Google Sheets 讀取數據並產生靜態網站"
     )

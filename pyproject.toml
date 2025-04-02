@@ -54,6 +54,8 @@ disallow_incomplete_defs = false
 [tool.ruff]
 line-length = 88
 target-version = "py311"
+
+[tool.ruff.lint]
 select = [
     "E",  # pycodestyle errors
     "F",  # pyflakes
@@ -61,7 +63,7 @@ select = [
     "C",  # flake8-comprehensions
     "B",  # flake8-bugbear
 ]
-ignore = []
+ignore = ["E402"]  # 忽略模組導入不在頂部的錯誤
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
