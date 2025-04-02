@@ -2,7 +2,7 @@ name: 建置並部署靜態網站
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master ]
   workflow_dispatch:
   schedule:
     # 每天早上 8:00 (UTC+8) 執行，UTC 時間為 00:00
@@ -16,20 +16,20 @@ jobs:
     steps:
     - name: 檢出程式碼
       uses: actions/checkout@v2
-      
+
     - name: 設定 Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
+
     - name: 安裝 Poetry
       uses: snok/install-poetry@v1
       with:
         version: 1.5.1
-        
+
     - name: 安裝依賴
       run: poetry install --no-root
-      
+
     - name: 生成靜態網站
       run: poetry run python src/main.py
       env:
@@ -37,7 +37,14 @@ jobs:
         SPREADSHEET_ID: ${{ vars.SPREADSHEET_ID }}
         SHEET_NAME: ${{ vars.SHEET_NAME }}
         OUTPUT_DIR: ${{ vars.OUTPUT_DIR || 'dist' }}
-        
+
+    - name: 檢查輸出目錄
+      run: |
+        echo "檢查輸出目錄"
+        ls -la
+        echo "檢查 dist 目錄"
+        ls -la dist || echo "dist 目錄不存在"
+
     - name: 部署到 Cloudflare Pages
       uses: cloudflare/pages-action@v1
       with:
@@ -45,5 +52,5 @@ jobs:
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME || 'pen-power-recall-website-2025' }}
         directory: dist
-        branch: main
-        production: true 
+        branch: master
+        production: true
