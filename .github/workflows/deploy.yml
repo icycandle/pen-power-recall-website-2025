@@ -23,9 +23,6 @@ jobs:
       with:
         version: 1.5.1
 
-    - name: 更新 lock 檔案
-      run: poetry lock --no-update
-
     - name: 安裝依賴
       run: poetry install --no-root
 
