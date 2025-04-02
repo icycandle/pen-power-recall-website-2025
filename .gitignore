@@ -38,4 +38,39 @@ venv/
 ENV/
 
 # 測試輸出
-test_output/ 
+test_output/
+
+# 忽略測試輸出目錄
+test_dry_run/
+
+# 忽略 Python 快取文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+
+# 虛擬環境
+.venv/
+venv/
+ENV/
+
+# Python 套件安裝信息
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 環境檔案
+.env
+
+# 編輯器設定
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系統文件
+.DS_Store
+Thumbs.db
