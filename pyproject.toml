@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "將Google Sheets資料轉換為靜態網站"
 authors = ["icycandle <icycandle@gmail.com>"]
 readme = "README.md"
+packages = [{include = "src"}]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -15,10 +17,52 @@ colorama = ">=0.4.6,<0.5.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
+pre-commit = "^4.2.0"
+black = "^24.2.0"
+isort = "^5.13.2"
+mypy = "^1.9.0"
+ruff = "^0.3.6"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+strict_optional = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = [
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = []
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
