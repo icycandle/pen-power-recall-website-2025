@@ -1,20 +1,17 @@
-[project]
+[tool.poetry]
 name = "pen-power-recall-website"
 version = "0.1.0"
 description = "將Google Sheets資料轉換為靜態網站"
-authors = [
-    {name = "Your Name",email = "your.email@example.com"}
-]
+authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
-requires-python = "^3.11"
-dependencies = [
-    "gspread (>=6.2.0,<7.0.0)",
-    "jinja2 (>=3.1.6,<4.0.0)",
-    "python-dotenv (>=1.1.0,<2.0.0)",
-    "oauth2client (>=4.1.3,<5.0.0)",
-    "colorama (>=0.4.6,<0.5.0)"
-]
 
+[tool.poetry.dependencies]
+python = "^3.11"
+gspread = ">=6.2.0,<7.0.0"
+jinja2 = ">=3.1.6,<4.0.0"
+python-dotenv = ">=1.1.0,<2.0.0"
+oauth2client = ">=4.1.3,<5.0.0"
+colorama = ">=0.4.6,<0.5.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
