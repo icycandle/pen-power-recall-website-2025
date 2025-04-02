@@ -2,7 +2,7 @@
 name = "pen-power-recall-website"
 version = "0.1.0"
 description = "將Google Sheets資料轉換為靜態網站"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["icycandle <icycandle@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
