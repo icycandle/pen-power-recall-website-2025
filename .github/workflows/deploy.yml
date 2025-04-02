@@ -43,6 +43,6 @@ jobs:
       with:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME || 'pen-power-recall' }}
+        projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME || 'pen-power-recall-website-2025' }}
         directory: dist
         branch: main
