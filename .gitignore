@@ -1,0 +1,41 @@
+# 環境設定
+.env
+credentials.json
+pen-power-recall-website-2025-7dd456eda4d1.json
+*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 虛擬環境
+.venv/
+venv/
+ENV/
+
+# 測試輸出
+test_output/ 

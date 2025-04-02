@@ -1,0 +1,48 @@
+name: 產生並部署靜態網站
+
+on:
+  schedule:
+    # 每天執行一次 (UTC 時間 0:00，即台灣時間早上 8:00)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # 允許手動觸發
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v3
+      
+      - name: 設定 Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+          
+      - name: 安裝 Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      
+      - name: 安裝依賴項
+        run: |
+          poetry install
+      
+      - name: 產生靜態網站
+        env:
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          SHEET_NAME: ${{ secrets.SHEET_NAME }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          OUTPUT_DIR: dist
+        run: |
+          poetry run python src/main.py
+      
+      - name: 部署到 Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: pen-power-recall
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }} 
