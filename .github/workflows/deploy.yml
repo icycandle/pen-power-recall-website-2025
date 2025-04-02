@@ -26,6 +26,10 @@ jobs:
     - name: 安裝依賴
       run: poetry install
       
+    - name: 執行單元測試
+      run: |
+        poetry run pytest -v
+      
     - name: 生成靜態網站
       run: |
         poetry run python src/main.py
