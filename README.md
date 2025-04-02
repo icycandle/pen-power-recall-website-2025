@@ -96,4 +96,39 @@ pen_power_recall_website_2025/
 
 ## 授權
 
-MIT 授權 
+MIT 授權
+
+## 安裝與開發
+
+### 安裝依賴
+
+```bash
+# 安裝所有依賴（包括開發依賴）
+poetry install --with dev
+```
+
+### 設置 Git Hooks
+
+本專案使用 pre-commit 來確保程式碼品質。安裝 git hooks：
+
+```bash
+# 安裝 pre-commit hooks
+poetry run pre-commit install
+```
+
+pre-commit 會在每次提交前執行以下檢查：
+- 程式碼格式化 (black, isort)
+- 靜態代碼分析 (ruff, mypy)
+- 常見問題檢查 (檢查尾隨空格、文件末尾換行等)
+- 運行單元測試
+
+### 手動運行檢查
+
+```bash
+# 對所有文件運行 pre-commit 檢查
+poetry run pre-commit run --all-files
+
+# 運行特定的檢查
+poetry run pre-commit run black --all-files
+poetry run pre-commit run pytest --all-files
+```
