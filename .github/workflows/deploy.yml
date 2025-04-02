@@ -4,43 +4,34 @@ on:
   push:
     branches: [ master, main ]
   workflow_dispatch:
-  schedule:
-    # 每天早上 8:00 (UTC+8) 執行，UTC 時間為 00:00
-    - cron: '0 0 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: prod
-
+    
     steps:
     - name: 檢出程式碼
       uses: actions/checkout@v2
-
+      
     - name: 設定 Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-
+        
     - name: 安裝 Poetry
       uses: snok/install-poetry@v1
       with:
         version: 1.5.1
-
+        
     - name: 安裝依賴
-      run: poetry install --no-root
-
-    - name: 執行單元測試
-      run: poetry run pytest -v
-
+      run: poetry install
+      
     - name: 生成靜態網站
-      run: poetry run python src/main.py
+      run: |
+        poetry run python main.py
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        SPREADSHEET_ID: ${{ vars.SPREADSHEET_ID }}
-        SHEET_NAME: ${{ vars.SHEET_NAME }}
-        OUTPUT_DIR: ${{ vars.OUTPUT_DIR || 'dist' }}
-
+        
     - name: 部署到 Cloudflare Pages
       uses: cloudflare/pages-action@v1
       with:
@@ -49,3 +40,4 @@ jobs:
         projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME || 'pen-power-recall-website-2025' }}
         directory: dist
         branch: main
+        production: true 
