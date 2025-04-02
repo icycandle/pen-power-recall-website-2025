@@ -34,9 +34,9 @@ jobs:
       run: poetry run python src/main.py
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
-        SHEET_NAME: ${{ secrets.SHEET_NAME }}
-        OUTPUT_DIR: dist
+        SPREADSHEET_ID: ${{ vars.SPREADSHEET_ID }}
+        SHEET_NAME: ${{ vars.SHEET_NAME }}
+        OUTPUT_DIR: ${{ vars.OUTPUT_DIR || 'dist' }}
 
     - name: 部署到 Cloudflare Pages
       uses: cloudflare/pages-action@v1
