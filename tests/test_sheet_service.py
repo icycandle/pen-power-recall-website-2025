@@ -18,7 +18,7 @@ class TestSheetService(unittest.TestCase):
     def test_init_with_env_credentials(self, mock_credentials, mock_gspread):
         """測試使用環境變數初始化"""
         # 設置環境變數
-        test_creds = {"test": "credentials"}
+        test_creds = {"type": "service_account", "project_id": "test"}
         mock_creds = MagicMock()
         
         with patch.dict(os.environ, {"GOOGLE_CREDENTIALS": json.dumps(test_creds)}):
@@ -60,9 +60,17 @@ class TestSheetService(unittest.TestCase):
                 # 驗證 gspread 使用正確的憑證
                 mock_gspread.authorize.assert_called_once_with(mock_creds)
 
-    @patch('gspread.authorize')
-    def test_get_sheet_data(self, mock_authorize):
+    @patch('src.application.sheet_service.gspread')
+    @patch('src.application.sheet_service.ServiceAccountCredentials')
+    def test_get_sheet_data(self, mock_credentials, mock_gspread):
         """測試從 Google Sheets 獲取資料"""
+        # 設置環境變數
+        test_creds = {"type": "service_account", "project_id": "test"}
+        
+        # 模擬憑證
+        mock_creds = MagicMock()
+        mock_credentials.from_json_keyfile_dict.return_value = mock_creds
+        
         # 模擬數據
         mock_worksheet = MagicMock()
         mock_worksheet.get_all_values.return_value = [
@@ -77,31 +85,37 @@ class TestSheetService(unittest.TestCase):
         mock_client = MagicMock()
         mock_client.open_by_key.return_value = mock_spreadsheet
         
-        # 設置返回值
-        mock_authorize.return_value = mock_client
+        # 設置 gspread
+        mock_gspread.authorize.return_value = mock_client
         
-        # 設置環境變數
-        with patch.dict(os.environ, {"GOOGLE_CREDENTIALS": json.dumps({"test": "credentials"})}):
-            # 執行測試
-            with patch('src.application.sheet_service.gspread.authorize', return_value=mock_client):
-                service = SheetService()
-                result = service.get_sheet_data("test_spreadsheet_id", "test_sheet_name")
-                
-                # 驗證調用
-                mock_client.open_by_key.assert_called_once_with("test_spreadsheet_id")
-                mock_spreadsheet.worksheet.assert_called_once_with("test_sheet_name")
-                mock_worksheet.get_all_values.assert_called_once()
-                
-                # 驗證返回值
-                self.assertIsInstance(result, SheetData)
-                self.assertEqual(result.headers, ["標題", "作者", "連結"])
-                self.assertEqual(len(result.rows), 2)
-                self.assertEqual(result.rows[0], ["測試標題1", "測試作者1", "https://example.com/1"])
-                self.assertEqual(result.rows[1], ["測試標題2", "測試作者2", "https://example.com/2"])
+        # 執行測試
+        with patch.dict(os.environ, {"GOOGLE_CREDENTIALS": json.dumps(test_creds)}):
+            service = SheetService()
+            result = service.get_sheet_data("test_spreadsheet_id", "test_sheet_name")
+            
+            # 驗證調用
+            mock_client.open_by_key.assert_called_once_with("test_spreadsheet_id")
+            mock_spreadsheet.worksheet.assert_called_once_with("test_sheet_name")
+            mock_worksheet.get_all_values.assert_called_once()
+            
+            # 驗證返回值
+            self.assertIsInstance(result, SheetData)
+            self.assertEqual(result.headers, ["標題", "作者", "連結"])
+            self.assertEqual(len(result.rows), 2)
+            self.assertEqual(result.rows[0], ["測試標題1", "測試作者1", "https://example.com/1"])
+            self.assertEqual(result.rows[1], ["測試標題2", "測試作者2", "https://example.com/2"])
 
-    @patch('gspread.authorize')
-    def test_get_sheet_data_empty(self, mock_authorize):
+    @patch('src.application.sheet_service.gspread')
+    @patch('src.application.sheet_service.ServiceAccountCredentials')
+    def test_get_sheet_data_empty(self, mock_credentials, mock_gspread):
         """測試處理空表格"""
+        # 設置環境變數
+        test_creds = {"type": "service_account", "project_id": "test"}
+        
+        # 模擬憑證
+        mock_creds = MagicMock()
+        mock_credentials.from_json_keyfile_dict.return_value = mock_creds
+        
         # 模擬空表格
         mock_worksheet = MagicMock()
         mock_worksheet.get_all_values.return_value = []
@@ -112,17 +126,15 @@ class TestSheetService(unittest.TestCase):
         mock_client = MagicMock()
         mock_client.open_by_key.return_value = mock_spreadsheet
         
-        # 設置返回值
-        mock_authorize.return_value = mock_client
+        # 設置 gspread
+        mock_gspread.authorize.return_value = mock_client
         
-        # 設置環境變數
-        with patch.dict(os.environ, {"GOOGLE_CREDENTIALS": json.dumps({"test": "credentials"})}):
-            # 執行測試
-            with patch('src.application.sheet_service.gspread.authorize', return_value=mock_client):
-                service = SheetService()
-                result = service.get_sheet_data("test_spreadsheet_id", "test_sheet_name")
-                
-                # 驗證返回空 SheetData
-                self.assertIsInstance(result, SheetData)
-                self.assertEqual(result.headers, [])
-                self.assertEqual(result.rows, []) 
+        # 執行測試
+        with patch.dict(os.environ, {"GOOGLE_CREDENTIALS": json.dumps(test_creds)}):
+            service = SheetService()
+            result = service.get_sheet_data("test_spreadsheet_id", "test_sheet_name")
+            
+            # 驗證返回空 SheetData
+            self.assertIsInstance(result, SheetData)
+            self.assertEqual(result.headers, [])
+            self.assertEqual(result.rows, []) 

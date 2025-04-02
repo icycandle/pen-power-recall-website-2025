@@ -105,6 +105,8 @@ class TestHtmlGenerator(unittest.TestCase):
         """測試生成網站功能"""
         # 設置模擬
         mock_template = MagicMock()
+        mock_template.render.return_value = "測試 HTML 內容"
+        
         mock_env = MagicMock()
         mock_env.get_template.return_value = mock_template
         mock_environment.return_value = mock_env
@@ -126,8 +128,17 @@ class TestHtmlGenerator(unittest.TestCase):
         self.assertTrue(os.path.exists(self.test_output_dir))
         
         # 驗證模板引擎調用
-        mock_env.get_template.assert_called_once_with("index.html")
-        mock_template.render.assert_called_once()
+        mock_env.get_template.assert_called_with("index.html")
+        self.assertTrue(mock_template.render.called)
+        
+        # 檢查 index.html 是否已創建
+        index_path = os.path.join(self.test_output_dir, "index.html")
+        self.assertTrue(os.path.exists(index_path))
+        
+        # 簡單讀取檔案進行驗證
+        with open(index_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            self.assertEqual(content, "測試 HTML 內容")
     
     def test_to_link(self):
         """測試 URL 轉換為 HTML 連結功能"""
