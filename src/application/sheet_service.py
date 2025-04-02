@@ -3,7 +3,7 @@ Google Sheets 服務 - 負責從 Google Sheets 取得資料
 """
 import os
 import json
-from typing import Any
+from typing import Any, Optional, Dict, List
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials

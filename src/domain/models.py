@@ -1,21 +1,22 @@
 """
-領域模型 - 定義應用程式所需的核心資料結構
+領域模型 - 定義資料結構
 """
 from dataclasses import dataclass
-from typing import Any
+from typing import List, Dict
+
 
 @dataclass
 class SheetData:
-    """Google Sheets 資料模型"""
-    headers: list[str]
-    rows: list[list[Any]]
+    """表格資料類別"""
+    headers: List[str]
+    rows: List[List[str]]
     
     @property
     def row_count(self) -> int:
         """獲取資料行數"""
         return len(self.rows)
     
-    def to_dict_list(self) -> list[dict[str, Any]]:
+    def to_dict_list(self) -> List[Dict[str, str]]:
         """將原始資料轉換為字典列表格式以便於渲染"""
         result = []
         for row in self.rows:
