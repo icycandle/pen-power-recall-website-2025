@@ -28,9 +28,12 @@ jobs:
       
     - name: 生成靜態網站
       run: |
-        poetry run python main.py
+        poetry run python src/main.py
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+        SHEET_NAME: ${{ secrets.SHEET_NAME }}
+        OUTPUT_DIR: dist
         
     - name: 部署到 Cloudflare Pages
       uses: cloudflare/pages-action@v1
@@ -38,5 +41,5 @@ jobs:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME || 'pen-power-recall' }}
-        directory: ./public
+        directory: dist
         branch: main 
