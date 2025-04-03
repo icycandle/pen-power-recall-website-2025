@@ -5,8 +5,8 @@ on:
     branches: [ master ]
   workflow_dispatch:
   schedule:
-    # 每天早上 8:00 (UTC+8) 執行，UTC 時間為 00:00
-    - cron: '0 0 * * *'
+    # 每天執行四次，分別在 UTC 0:00, 6:00, 12:00, 18:00 (對應台灣時間 8:00, 14:00, 20:00, 2:00)
+    - cron: '0 0,6,12,18 * * *'
 
 jobs:
   build:
