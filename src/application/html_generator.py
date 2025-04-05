@@ -66,7 +66,7 @@ class HtmlGenerator:
         Returns:
             含有重要欄位索引的字典
         """
-        indices = {"link": -1, "timestamp": -1, "author": -1, "category": -1}
+        indices = {"link": -1, "timestamp": -1, "author": -1, "category": -1, "title": -1}
 
         for i, header in enumerate(data.headers):
             header_lower = header.lower()
@@ -78,6 +78,8 @@ class HtmlGenerator:
                 indices["author"] = i
             elif header_lower in ["類別", "分類", "category", "type"]:
                 indices["category"] = i
+            elif header_lower in ["作品標題", "標題", "title"]:
+                indices["title"] = i
 
         return indices
 
@@ -96,7 +98,7 @@ class HtmlGenerator:
             更新後的索引字典
         """
         # 創建新索引字典
-        new_indices = {"link": -1, "timestamp": -1, "author": -1, "category": -1}
+        new_indices = {"link": -1, "timestamp": -1, "author": -1, "category": -1, "title": -1}
 
         # 建立原始欄位名稱到過濾後索引的映射
         for key, orig_idx in orig_indices.items():
@@ -185,6 +187,7 @@ class HtmlGenerator:
             timestamp_column_index=indices["timestamp"],
             author_column_index=indices["author"],
             category_column_index=indices["category"],
+            title_column_index=indices["title"],
             now=format_time,
             year=current_time.year,
             site_url=site_url,
@@ -219,12 +222,13 @@ class HtmlGenerator:
                     shutil.copy2(item, dest_path)
 
     @staticmethod
-    def _to_link(value: str) -> str:
+    def _to_link(value: str, title: str = "") -> str:
         """
         將URL轉換為HTML連結
 
         Args:
             value: URL字串
+            title: 連結的顯示文字，如果為空則顯示"開啟連結"
 
         Returns:
             轉換後的HTML連結
@@ -237,7 +241,10 @@ class HtmlGenerator:
         if not (url.startswith("http://") or url.startswith("https://")):
             url = "https://" + url
 
-        return f'<a href="{url}" target="_blank" rel="noopener noreferrer">開啟連結</a>'
+        # 設定連結顯示文字，如果標題為空則使用預設文字
+        display_text = title if title else "開啟連結"
+
+        return f'<a href="{url}" target="_blank" rel="noopener noreferrer">{display_text}</a>'
 
     @staticmethod
     def _format_date(value: str) -> str:

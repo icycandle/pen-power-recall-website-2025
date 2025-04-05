@@ -71,7 +71,9 @@
                         <thead class="table-dark">
                             <tr>
                                 {% for header in headers %}
+                                {% if title_column_index != loop.index0 %}
                                 <th scope="col">{{ header }}</th>
+                                {% endif %}
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -91,8 +93,14 @@
 
                                 <tr data-category="{{ category }}" data-author="{{ author }}">
                                     {% for i in range(row|length) %}
-                                        {% if i == link_column_index %}
-                                            <td>{{ row[i] | to_link | safe }}</td>
+                                        {% if i == title_column_index %}
+                                            {# 跳過作品標題列 #}
+                                        {% elif i == link_column_index %}
+                                            {% set title_text = "" %}
+                                            {% if title_column_index >= 0 and title_column_index < row|length %}
+                                                {% set title_text = row[title_column_index] %}
+                                            {% endif %}
+                                            <td>{{ row[i] | to_link(title_text) | safe }}</td>
                                         {% elif i == timestamp_column_index %}
                                             <td>{{ row[i] | format_date }}</td>
                                         {% else %}
