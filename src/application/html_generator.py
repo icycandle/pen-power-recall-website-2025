@@ -7,6 +7,7 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
+import pytz
 from jinja2 import Environment, FileSystemLoader
 
 from src.domain.models import SheetData
@@ -169,8 +170,9 @@ class HtmlGenerator:
         # 獲取模板
         template = self.env.get_template("index.html")
 
-        # 獲取當前時間
-        current_time = datetime.now()
+        # 獲取台灣時區的當前時間
+        tw_timezone = pytz.timezone('Asia/Taipei')
+        current_time = datetime.now(tw_timezone)
         format_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
         # 從環境變數中獲取網站 URL，如果沒有則使用默認值
